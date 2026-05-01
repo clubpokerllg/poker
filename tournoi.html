@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tournoi de Poker — Club Poker LLG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@300;400;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --noir:#0A0A0A;
+  --or:#B89C6F;
+  --bordeaux:#7C243B;
+  --creme:#F5F5DC;
+  --rougevif:#d03f1b;
+}
+
+body{
+  background:var(--noir);
+  color:var(--creme);
+  font-family:'Rajdhani',sans-serif;
+  font-weight:300;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+.header{
+  background-color:var(--noir);
+  padding:24px 5%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-bottom:1px solid rgba(184,156,111,.2);
+  position:relative;
+}
+.header::after{
+  content:'';
+  position:absolute;
+  bottom:-4px;left:5%;right:5%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--bordeaux),transparent);
+}
+.logo h1{
+  margin:0;
+  font-family:'Monoton',serif;
+  font-size:clamp(18px,3.5vw,30px);
+  color:transparent;
+  -webkit-text-stroke:1px var(--or);
+  letter-spacing:.06em;
+  animation:fadeUp .7s ease both;
+}
+a{color:var(--or);text-decoration:none;transition:color 0.3s ease;}
+a:hover{color:var(--creme);}
+
+.back-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin:0 auto 0;
+  padding:14px 36px;
+  border:1px solid rgba(184,156,111,.35);
+  color:var(--or);
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px;
+  letter-spacing:.4em;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:background .3s,border-color .3s,color .3s;
+  position:relative;
+}
+.back-btn::before,.back-btn::after{
+  content:'';position:absolute;
+  width:8px;height:8px;
+  border-color:var(--bordeaux);border-style:solid;
+  transition:border-color .3s;
+}
+.back-btn::before{top:-1px;left:-1px;border-width:1px 0 0 1px;}
+.back-btn::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0;}
+.back-btn:hover{background:rgba(184,156,111,.06);border-color:var(--or);color:var(--creme);}
+.back-btn:hover::before,.back-btn:hover::after{border-color:var(--or);}
+.back-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
+
+.hero{
+  position:relative;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:60px 5% 80px;
+  text-align:center;
+  overflow:hidden;
+}
+@media(max-width:640px){
+  .hero{padding:32px 5% 48px;min-height:unset;}
+}
+
+.hero-frame{
+  position:absolute;inset:20px;
+  border:1px solid rgba(184,156,111,.25);
+  pointer-events:none;
+}
+.hero-frame::before,.hero-frame::after{
+  content:'';position:absolute;
+  width:18px;height:18px;
+  border-color:var(--or);border-style:solid;
+}
+.hero-frame::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}
+.hero-frame::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
+
+.hero-inner{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:900px;
+}
+
+.edition-label{
+  display:block;
+  font-size:10px;
+  letter-spacing:.45em;
+  text-transform:uppercase;
+  color:rgba(184,156,111,.5);
+  margin-bottom:28px;
+  margin-top:20px;
+  font-family:'Rajdhani',sans-serif;
+}
+@media(max-width:480px){
+  .edition-label{font-size:9px;letter-spacing:.2em;margin-bottom:16px;}
+}
+
+.affiche-title{
+  display:block;
+  font-family:'Monoton',serif;
+  font-size:clamp(48px,16vw,160px);
+  line-height:.85;
+  color:transparent;
+  -webkit-text-stroke:1.5px var(--rougevif);
+  animation:fadeUp .9s .24s ease both;
+}
+.affiche-de{
+  display:block;
+  font-family:'Monoton',serif;
+  font-size:clamp(22px,6vw,70px);
+  color:transparent;
+  -webkit-text-stroke:1px var(--rougevif);
+  animation:fadeUp .9s .12s ease both;
+}
+.affiche-poker{
+  display:block;
+  font-family:'Monoton',serif;
+  font-size:clamp(48px,16vw,160px);
+  font-style:italic;
+  line-height:.85;
+  color:transparent;
+  -webkit-text-stroke:1.5px var(--rougevif);
+  animation:fadeUp .9s .24s ease both;
+}
+
+.subtitle-strip{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  margin:36px auto;
+  animation:fadeUp .9s .36s ease both;
+  flex-wrap:wrap;
+}
+@media(max-width:480px){
+  .subtitle-strip{margin:24px auto 20px;}
+}
+.strip-line{width:50px;height:1px;background:var(--bordeaux);flex-shrink:0;}
+.subtitle-text{
+  font-size:10px;
+  letter-spacing:.4em;
+  text-transform:uppercase;
+  color:rgba(245,245,220,.6);
+  white-space:nowrap;
+  font-family:'Rajdhani',sans-serif;
+}
+
+.infos-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:rgba(184,156,111,.15);
+  border:1px solid rgba(184,156,111,.15);
+  max-width:560px;
+  width:100%;
+  margin:0 auto 24px;
+  animation:fadeUp .9s .48s ease both;
+}
+@media(max-width:480px){
+  .infos-grid{grid-template-columns:1fr;max-width:280px;}
+}
+.info-cell{
+  background:var(--noir);
+  padding:22px 12px;
+  text-align:center;
+}
+@media(max-width:480px){
+  .info-cell{padding:16px 12px;}
+}
+.info-label{
+  display:block;
+  font-size:9px;
+  letter-spacing:.4em;
+  text-transform:uppercase;
+  color:var(--bordeaux);
+  font-weight:700;
+  margin-bottom:8px;
+  font-family:'Rajdhani',sans-serif;
+}
+.info-value{
+  font-family:'Monoton',serif;
+  font-size:clamp(11px,2vw,17px);
+  color:var(--creme);
+  line-height:1.3;
+}
+
+.mention{
+  font-size:13px;
+  font-style:italic;
+  color:rgba(184,156,111,.5);
+  line-height:1.7;
+  animation:fadeUp .9s .6s ease both;
+  padding:0 4px;
+  font-family:'Rajdhani',sans-serif;
+}
+@media(max-width:480px){
+  .mention{font-size:12px;}
+}
+
+.section-rules{
+  max-width:1100px;
+  margin:0 auto;
+  padding:80px 5%;
+}
+@media(max-width:640px){
+  .section-rules{padding:48px 5%;}
+}
+
+.section-header{
+  margin-bottom:50px;
+}
+@media(max-width:640px){
+  .section-header{margin-bottom:32px;}
+}
+.section-eyebrow{
+  display:block;
+  font-size:10px;
+  letter-spacing:.4em;
+  text-transform:uppercase;
+  color:var(--bordeaux);
+  font-weight:700;
+  margin-bottom:8px;
+  font-family:'Rajdhani',sans-serif;
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,5vw,52px);
+  color:var(--or);
+  line-height:1;
+}
+.section-note{
+  display:block;
+  font-size:12px;
+  color:rgba(184,156,111,.4);
+  font-style:italic;
+  margin-top:12px;
+  font-family:'Rajdhani',sans-serif;
+}
+
+.rules-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+  counter-reset:rules;
+}
+@media(min-width:640px){
+  .rules-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+.rule-item{
+  padding:32px 24px;
+  border:1px solid rgba(245,245,220,.06);
+  transition:background .3s;
+}
+@media(max-width:640px){
+  .rule-item{padding:24px 16px;}
+}
+.rule-item:hover{background:rgba(184,156,111,.04);}
+.rule-item::before{
+  counter-increment:rules;
+  content:counter(rules,decimal-leading-zero) ".";
+  font-family:'Playfair Display',serif;
+  color:var(--bordeaux);
+  font-size:12px;
+  display:block;
+  margin-bottom:14px;
+  letter-spacing:.1em;
+}
+.rule-item h3{
+  font-size:10px;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  color:var(--or);
+  margin-bottom:10px;
+  font-weight:700;
+  font-family:'Rajdhani',sans-serif;
+}
+.rule-item p{
+  font-size:14px;
+  color:rgba(245,245,220,.6);
+  line-height:1.75;
+  font-family:'Rajdhani',sans-serif;
+  font-weight:300;
+}
+
+.section-flow{
+  max-width:1100px;
+  margin:0 auto;
+  padding:0 5% 80px;
+}
+@media(max-width:640px){
+  .section-flow{padding:0 5% 48px;}
+}
+
+.flow-steps{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  border-left:1px solid rgba(184,156,111,.2);
+  margin-left:12px;
+  padding-left:0;
+}
+
+.flow-step{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:0 28px;
+  align-items:start;
+  padding:28px 0;
+  border-bottom:1px solid rgba(245,245,220,.04);
+  position:relative;
+}
+@media(max-width:480px){
+  .flow-step{gap:0 16px;padding:20px 0;}
+}
+.flow-step:last-child{border-bottom:none;}
+
+.flow-dot{
+  width:10px;height:10px;
+  border-radius:50%;
+  background:var(--bordeaux);
+  margin-top:6px;
+  margin-left:-5px;
+  flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(124,36,59,.2);
+}
+
+.flow-label{
+  font-size:9px;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--bordeaux);
+  font-weight:700;
+  margin-bottom:6px;
+  font-family:'Rajdhani',sans-serif;
+}
+.flow-text{
+  font-size:14px;
+  color:rgba(245,245,220,.6);
+  line-height:1.75;
+  font-family:'Rajdhani',sans-serif;
+  font-weight:300;
+}
+
+.cta-section{
+  border-top:1px solid rgba(184,156,111,.15);
+  padding:70px 6%;
+  text-align:center;
+}
+@media(max-width:640px){
+  .cta-section{padding:48px 6%;}
+}
+.cta-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(20px,4vw,38px);
+  color:var(--creme);
+  margin-bottom:10px;
+  line-height:1.3;
+}
+.cta-sub{
+  font-size:12px;
+  color:rgba(245,245,220,.4);
+  letter-spacing:.1em;
+  margin-bottom:36px;
+  font-family:'Rajdhani',sans-serif;
+}
+
+.footer{
+  background:var(--bordeaux);
+  padding:18px 5%;
+  text-align:center;
+  font-size:13px;
+  color:var(--creme);
+  border-top:2px solid var(--noir);
+  font-family:'Rajdhani',sans-serif;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px);}
+  to{opacity:1;transform:translateY(0);}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo"><h1>Club Poker LLG</h1></div>
+</header>
+
+<section class="hero">
+  <div class="hero-frame"></div>
+  <div class="hero-inner">
+    <span class="edition-label">Maison des Lycéens · Louis le Grand · Édition 2026</span>
+
+    <span class="affiche-title">TOURNOI</span>
+    <span class="affiche-de">de</span>
+    <span class="affiche-poker">POKER</span>
+
+    <div class="subtitle-strip">
+      <div class="strip-line"></div>
+      <span class="subtitle-text">Texas Hold'em &nbsp;—&nbsp; Freezout</span>
+      <div class="strip-line"></div>
+    </div>
+
+    <div class="infos-grid">
+      <div class="info-cell">
+        <span class="info-label">Date</span>
+        <div class="info-value">Mercredi<br>2X    Mai</div>
+      </div>
+      <div class="info-cell">
+        <span class="info-label">Heure</span>
+        <div class="info-value">A partir<br> de 15h</div>
+      </div>
+      <div class="info-cell">
+        <span class="info-label">Lieu</span>
+        <div class="info-value">Maison<br>des Lycéens</div>
+      </div>
+    </div>
+
+    <p class="mention">Participation gratuite · Inscription obligatoire · Ouvert à tout niveau<br>Lots à gagner pour les finalistes · Pas d'argent réel mis en jeu</p>
+  </div>
+</section>
+
+<section class="section-flow">
+  <div class="section-header">
+    <span class="section-eyebrow">Comment ça marche</span>
+    <span class="section-title">Déroulement</span>
+    <span class="section-note">Le tournoi en quatre étapes clés.</span>
+  </div>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-dot"></div>
+      <div class="flow-content">
+        <div class="flow-label">Départ</div>
+        <p class="flow-text">Chaque joueur reçoit le même nombre de jetons au départ et joue jusqu'à ce qu'il les ait tous perdus.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-dot"></div>
+      <div class="flow-content">
+        <div class="flow-label">Répartition</div>
+        <p class="flow-text">Les joueurs sont répartis aléatoirement en plusieurs tables de 8 joueurs maximum.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-dot"></div>
+      <div class="flow-content">
+        <div class="flow-label">Blindes</div>
+        <p class="flow-text">Les blindes augmentent progressivement à intervalles de temps réguliers, forçant les joueurs courts à entrer en action.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-dot"></div>
+      <div class="flow-content">
+        <div class="flow-label">Tables & Rééquilibrage</div>
+        <p class="flow-text">Les tables sont rééquilibrées au fil des éliminations et reformées périodiquement par tirage au sort pour garantir l'équité.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-dot"></div>
+      <div class="flow-content">
+        <div class="flow-label">Victoire</div>
+        <p class="flow-text">Le vainqueur est le dernier joueur encore en possession de jetons.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-rules">
+  <div class="section-header">
+    <span class="section-eyebrow">Modalités</span>
+    <span class="section-title">Règlement</span>
+    <span class="section-note">Lisez attentivement ces règles avant de vous asseoir à la table.</span>
+  </div>
+
+  <div class="rules-grid">
+    <div class="rule-item">
+      <h3>Admission & Inscription</h3>
+      <p>La participation est réservée aux membres de la MDL. L'inscription doit être confirmée au minimum 24h avant le début du tournoi. Tout joueur non inscrit dans ce délai se verra refuser l'accès à la table, sauf exception accordée par le jury.</p>
+    </div>
+    <div class="rule-item">
+      <h3>Tolérance Zéro envers la Triche</h3>
+      <p>Toute forme de triche est formellement interdite : collusion entre joueurs, signaux non-verbaux, consultation d'un tiers ou d'un appareil électronique pendant une main. Tout manquement entraîne une disqualification immédiate et définitive.</p>
+    </div>
+    <div class="rule-item">
+      <h3>Étiquette & Conduite</h3>
+      <p>Le silence n'est pas exigé. Le respect des autres joueurs est obligatoire — le trash talk est fortement recommandé. Tout langage inapproprié sera sanctionné.</p>
+    </div>
+    <div class="rule-item">
+      <h3>Arbitrage & Décisions</h3>
+      <p>En cas de litige, la décision du floor (le président du tournoi) est finale et sans appel. Tout désaccord doit être signalé calmement avant l'action suivante. L'ignorance du règlement ne constitue pas une circonstance atténuante.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2 class="cta-title">Rejoignez le tournoi via le groupe WhatsApp<br>ou contactez-nous sur Instagram</h2>
+  <p class="cta-sub">Inscription obligatoire</p>
+  <a href="index.html" class="back-btn">
+    Retour à l'accueil
+  </a>
+</section>
+
+<footer class="footer">
+  <p>Club Poker LLG — Maison des Lycéens du Lycée Louis-le-Grand</p>
+</footer>
+
+</body>
+</html>
